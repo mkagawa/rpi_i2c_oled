@@ -47,11 +47,11 @@ class Utils:
         return datetime.now().strftime(format)
 
     @staticmethod
-    def compile_text(text, additional_replacements = {}):
+    def compile_text(text, datetime_format = None, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: Utils.get_hostname(),
             "{ip}": lambda prop: Utils.get_ip(),
-            "{datetime}": lambda prop: Utils.get_datetime()
+            "{datetime}": lambda prop: Utils.get_datetime(datetime_format)
         }
         replacements = {**replacements, **additional_replacements}
         regex = re.compile("(%s)" % "|".join(map(re.escape, replacements.keys())))
@@ -98,8 +98,8 @@ class HassioUtils(Utils):
             "{ip}": lambda prop: HassioUtils.get_ip()
         }
         text = Utils.compile_text(text, {**replacements, **additional_replacements})
-        regex = re.compile("{hassio\.[a-z]+\.[a-z\.]+}")
-        return regex.sub(lambda match: HassioUtils.get_hassio_info_property(match.string[match.start():match.end()][len("hassio\."):-1]), text)
+        regex = re.compile(r"{hassio\.[a-z]+\.[a-z\.]+}")
+        return regex.sub(lambda match: HassioUtils.get_hassio_info_property(match.string[match.start():match.end()][len(r"hassio\."):-1]), text)
 
     @staticmethod
     def get_hassio_info_property(properties_string):

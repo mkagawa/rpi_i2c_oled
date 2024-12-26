@@ -250,7 +250,8 @@ class StaticScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
-            self._text = self.utils.compile_text(self._text)
+            datetime_format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+            self._text = self.utils.compile_text(self._text, datetime_format)
             self.logger.info(f"Static screen text compiled: '{self._text}'")
 
         return self._text
