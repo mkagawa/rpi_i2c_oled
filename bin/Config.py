@@ -55,6 +55,7 @@ class Config:
         f = open(path, "r")
         options = json.loads(f.read())
         self.options = {k.lower(): v for k, v in options.items()}
+        logger.info(f"options:{self.options}")
 
     def _process_default_options(self):
         duration = self.get_option_value('default_duration')
