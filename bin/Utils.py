@@ -92,7 +92,7 @@ class HassioUtils(Utils):
             return "0.0.0.0"
 
     @staticmethod
-    def compile_text(text, additional_replacements = {}):
+    def compile_text(text, datetime_format = None, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: HassioUtils.get_hostname(),
             "{ip}": lambda prop: HassioUtils.get_ip()
