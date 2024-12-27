@@ -81,7 +81,7 @@ class BaseScreen:
         self.font_size = 8
         self.logger = logging.getLogger('Screen')
         self.logger.info("'" + self.__class__.__name__ + "' created")
-        self.logger.info(f"config: {config.datetime_format}")
+        self.logger.info(f"config: {config['datetime_format']}")
         self.datetime_format = config.datetime_format #if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
 
     @property
