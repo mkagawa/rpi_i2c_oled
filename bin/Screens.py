@@ -81,6 +81,7 @@ class BaseScreen:
         self.font_size = 8
         self.logger = logging.getLogger('Screen')
         self.logger.info("'" + self.__class__.__name__ + "' created")
+        self.datetime_format = config.datetime_format if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
 
     @property
     def name(self):
@@ -250,9 +251,8 @@ class StaticScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
-            datetime_format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
-            self.logger.warn(f"Datetime = {datetime_format}")
-            self._text = self.utils.compile_text(self._text, datetime_format)
+            self.logger.warn(f"Datetime = {self.datetime_format}")
+            self._text = self.utils.compile_text(self._text, self.datetime_format)
             self.logger.info(f"Static screen text compiled: '{self._text}'")
 
         return self._text
