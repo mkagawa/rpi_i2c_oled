@@ -92,6 +92,7 @@ class BaseScreen:
         """ set the image for this screen """
         if not self.icon or self.icon_path != path:
            self.icon_path = path
+           self.logger.info(f"image = {Utils.current_dir + self.icon_path}")
            img = Image.open(r"" + Utils.current_dir + self.icon_path)
            # img = img.convert('RGBA') # MUST be in RGB mode for the OLED
            # invert black icon to white (255) for OLED display
