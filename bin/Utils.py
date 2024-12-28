@@ -49,7 +49,7 @@ class Utils:
         try:
             ret = Utils.hassos_get_info("/host/info")
             Utils.logger.info(f"Hostname: {ret['hostname']}")
-            return ret['hostname']
+            return ret['data']['hostname']
         except Exception as e:
             Utils.logger.info(f"Error getting hostname: {e}")
             return ""
@@ -58,7 +58,7 @@ class Utils:
     def get_ip() -> str:
         try:
             ret = Utils.hassos_get_info("/network/info")
-            addr = ret['interfaces'][0]['ipv4']['address'][0]
+            addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
             ip_addr = addr.split('/')[0]
             Utils.logger.info(f"address: {ip_addr}")
             return ip_addr
@@ -71,7 +71,7 @@ class Utils:
         Utils.logger.info("Requesting data from '" + url + "'")
         ret = Utils.curl(url)
         if ret is None and ret['result'] == 'ok':
-            return ret['data']
+            return ret
         return None
 
     def get_datetime(format = None):
