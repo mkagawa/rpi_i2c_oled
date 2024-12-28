@@ -116,9 +116,9 @@ class Config:
                 screenshot = False
 
             rotate = self.get_option_value('rotate')
-            show_icons = self.get_option_value('show_icons')
-            show_hint = self.get_option_value('show_hint')
-            compact = self.get_option_value('compact')
+            show_icons = self.get_option_value('show_icons', True)
+            show_hint = self.get_option_value('show_hint', False)
+            compact = self.get_option_value('compact', False)
 
             self.display = Display(busnum=busnum, screenshot=screenshot,
                                    rotate=rotate, show_icons=show_icons,
@@ -198,10 +198,9 @@ class Config:
         
         return False
 
-    def get_option_value(self, key, screen = None):
+    def get_option_value(self, key, screen = None, default = None):
         key = self.has_option(key, screen)
-        if key:
-            return self.options[key]
+        return self.options[key] if key else default
 
     def get_screen_duration(self, name):
         if name in self.enabled_screens:
