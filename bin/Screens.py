@@ -16,6 +16,7 @@ class Display:
     def __init__(self, busnum = None, screenshot = False, rotate = False, show_icons = True,
                  compact = False, show_hint = False):
         self.logger = logging.getLogger('Display')
+        self.logger.info(f"self={self}, show_icons={show_icons}/rotate={rotate}/show_hint={show_hint}/busnum={busnum}")
 
         if not isinstance(busnum, int):
             busnum = Display.DEFAULT_BUSNUM
@@ -34,7 +35,6 @@ class Display:
         if self.show_icons and self.show_hint:
            self.logger.error("show_icons and show_hint both True; turning off hint")
            self.show_hint = False
-        self.logger.info(f"self={self}, show_icons={self.show_icons}/{show_icons}/rotate={rotate}/show_hint={show_hint}")
 
         self.image = Image.new("1", (self.width, self.height))
         self.draw = ImageDraw.Draw(self.image)
