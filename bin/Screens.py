@@ -73,7 +73,7 @@ class BaseScreen:
     fonts = {}
 
     def __init__(self, duration, display = None, utils = None, config = None):
-        self.display = display if display is not None else Display()
+        self.display = display if display is not None else Display(show_icons=True)
         self.duration = duration
         self.utils = utils if utils is not None else Utils()
         self.config = config
