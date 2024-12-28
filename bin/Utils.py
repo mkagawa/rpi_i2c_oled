@@ -3,6 +3,8 @@ import json
 import pathlib
 import re
 import subprocess
+import requests
+import os
 from datetime import datetime
 
 
@@ -10,9 +12,19 @@ class Utils:
     logger = logging.getLogger('Utils')
     current_dir = str(pathlib.Path(__file__).parent.parent.resolve())
 
+    # @staticmethod
+    # def shell_cmd(cmd):
+    #     return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT).decode("utf-8")
+
     @staticmethod
-    def shell_cmd(cmd):
-        return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT).decode("utf-8")
+    def curl(url, headers=None) -> dict:
+        token = os.getenv("SUPERVISOR_TOKEN")
+        headers = headers={"Authorization": f"Bearer {token}", "content-type": "application/json"}
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            Utils.logger.warning(f"Error in calling {url}, status={response.status_code}")
+            return None
+        return response.json()
 
     @staticmethod
     def get_text_center(display, text, font):
@@ -34,12 +46,34 @@ class Utils:
         return display.width < w
 
     @staticmethod
-    def get_hostname(opt = ""):
-        return str(Utils.shell_cmd("hostname " + opt + "| cut -d\' \' -f1")).strip()
+    def get_hostname() -> str:
+        try:
+            ret = Utils.hassos_get_info("/host/info")
+            Utils.logger.info(f"Hostname: {ret['hostname']}")
+            return ret['hostname']
+        except Exception as e:
+            Utils.logger.info(f"Error getting hostname: {e}")
+            return ""
 
     @staticmethod
-    def get_ip():
-        return Utils.get_hostname('-I')
+    def get_ip() -> str:
+        try:
+            ret = Utils.hassos_get_info("/network/info")
+            addr = ret['interfaces'][0]['ipv4']['address'][0]
+            ip_addr = addr.split('/')[0]
+            Utils.logger.info(f"address: {ip_addr}")
+            return ip_addr
+        except Exception as e:
+            Utils.logger.info(f"Error getting network info: {e}")
+            return ""
+
+    def hassos_get_info(type) -> dict:
+        url = 'http://supervisor/{}'.format(type)
+        Utils.logger.info("Requesting data from '" + url + "'")
+        ret = Utils.curl(url)
+        if ret is None and ret['result'] == 'ok':
+            return ret['data']
+        return None
 
     def get_datetime(format = None):
         if not format:
@@ -71,11 +105,7 @@ class Utils:
 class HassioUtils(Utils):
     @staticmethod
     def hassos_get_info(type):
-        url = 'http://supervisor/{}'.format(type)
-        Utils.logger.info("Requesting data from '" + url + "'")
-        cmd = 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" -H "Content-Type: application/json" ' + url
-        info = Utils.shell_cmd(cmd)
-        return json.loads(info)
+        Utils.hassos_get_info(type)
 
     @staticmethod
     def get_hostname(opt = ""):
