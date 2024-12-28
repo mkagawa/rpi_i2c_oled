@@ -116,9 +116,9 @@ class Config:
                 screenshot = False
 
             rotate = self.get_option_value('rotate')
-            show_icons = self.get_option_value('show_icons', True)
-            show_hint = self.get_option_value('show_hint', False)
-            compact = self.get_option_value('compact', False)
+            show_icons = self.get_option_value('show_icons', default=True)
+            show_hint = self.get_option_value('show_hint', default=False)
+            compact = self.get_option_value('compact', default=False)
 
             self.display = Display(busnum=busnum, screenshot=screenshot,
                                    rotate=rotate, show_icons=show_icons,
