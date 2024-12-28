@@ -71,10 +71,10 @@ class BaseScreen:
     font_bold_path = Utils.current_dir + "/fonts/DejaVuSans-Bold.ttf"
     fonts = {}
 
-    def __init__(self, duration, display = None, utils = None, config = None):
-        self.display = display if display is not None else Display()
+    def __init__(self, duration, display = Display(), utils = Utils(), config = None):
+        self.display = display
         self.duration = duration
-        self.utils = utils if utils is not None else Utils()
+        self.utils = utils
         self.config = config
         self.hint = None
         self.icon = None
