@@ -58,7 +58,7 @@ class Utils:
     def get_ip() -> str:
         try:
             ret = Utils.hassos_get_info("/network/info")
-            Utils.logger.info(f"Hostname: {ret['data']['interfaces']}")
+            Utils.logger.info(f"Network: {ret['data']['interfaces']}")
             addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
             ip_addr = addr.split('/')[0]
             Utils.logger.info(f"address: {ip_addr}")
@@ -71,7 +71,7 @@ class Utils:
         url = 'http://supervisor/{}'.format(type)
         Utils.logger.info("Requesting data from '" + url + "'")
         ret = Utils.curl(url)
-        if ret is None and ret['result'] == 'ok':
+        if ret is not None and ret['result'] == 'ok':
             return ret
         return None
 
