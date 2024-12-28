@@ -34,7 +34,7 @@ class Display:
         if self.show_icons and self.show_hint:
            self.logger.error("show_icons and show_hint both True; turning off hint")
            self.show_hint = False
-        self.logger.info(f"self={self}, show_icons={self.show_icons}")
+        self.logger.info(f"self={self}, show_icons={self.show_icons}/{show_icons}/rotate={rotate}/show_hint={show_hint}")
 
         self.image = Image.new("1", (self.width, self.height))
         self.draw = ImageDraw.Draw(self.image)
