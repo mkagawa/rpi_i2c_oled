@@ -1,5 +1,4 @@
 import logging
-import json
 import pathlib
 import re
 import subprocess
@@ -12,9 +11,9 @@ class Utils:
     logger = logging.getLogger('Utils')
     current_dir = str(pathlib.Path(__file__).parent.parent.resolve())
 
-    # @staticmethod
-    # def shell_cmd(cmd):
-    #     return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT).decode("utf-8")
+    @staticmethod
+    def shell_cmd(cmd):
+        return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT).decode("utf-8")
 
     @staticmethod
     def curl(url, headers=None) -> dict:
