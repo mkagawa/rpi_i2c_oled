@@ -34,6 +34,7 @@ class Display:
         if self.show_icons and self.show_hint:
            self.logger.error("show_icons and show_hint both True; turning off hint")
            self.show_hint = False
+        self.logger.error("{self}, {self.show_icons}")
 
         self.image = Image.new("1", (self.width, self.height))
         self.draw = ImageDraw.Draw(self.image)
@@ -212,7 +213,7 @@ class BaseScreen:
         self.display_hint()
 
         # add icon to canvas (if enabled)
-        self.logger.info(f"show_icon = {self.display.show_icons}, {self.icon}, {self.text_indent}")
+        self.logger.info(f"show_icons = {self.display.show_icons}, {self.icon}, {self.text_indent}")
         if self.display.show_icons and self.icon:
            self.display.image.paste(self.icon, (-3, 3))
 
