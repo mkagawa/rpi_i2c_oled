@@ -198,6 +198,7 @@ class Config:
         return False
 
     def get_option_value(self, key, screen = None):
+        Config.logger.info(f"Config.options={self.options}")
         key = self.has_option(key, screen)
         if key:
             return self.options[key]
