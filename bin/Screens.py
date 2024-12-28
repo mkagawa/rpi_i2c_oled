@@ -13,8 +13,7 @@ class Display:
     DEFAULT_BUSNUM = 1
     SCREENSHOT_PATH = "./img/examples/"
 
-    def __init__(self, busnum = None, screenshot = False, rotate = False, show_icons = True,
-                 compact = False, show_hint = False):
+    def __init__(self, busnum = None, screenshot = False, rotate = False, show_icons = True, compact = False, show_hint = False):
         self.logger = logging.getLogger('Display')
         self.logger.info(f"self={self}, show_icons={show_icons}/rotate={rotate}/show_hint={show_hint}/busnum={busnum}")
 
@@ -73,7 +72,7 @@ class BaseScreen:
     fonts = {}
 
     def __init__(self, duration, display = None, utils = None, config = None):
-        self.display = display if display is not None else Display(show_icons=True)
+        self.display = display if display is not None else Display()
         self.duration = duration
         self.utils = utils if utils is not None else Utils()
         self.config = config
@@ -82,7 +81,7 @@ class BaseScreen:
         self.font_size = 8
         self.logger = logging.getLogger('Screen')
         self.logger.info("'" + self.__class__.__name__ + "' created")
-        #self.logger.info(f"config: {config.get_option_value('datetime_format')}")
+        self.logger.info(f"BaseScreen: display={self.display},{self.display.show_icons}")
         self.datetime_format = config.get_option_value('datetime_format') #if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
 
     @property
