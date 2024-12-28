@@ -54,7 +54,6 @@ class Config:
         Config.logger.info('Loading config: ' + path)
         f = open(path, "r")
         options = json.loads(f.read())
-        Config.logger.info(f"options: {options}")
         self.options = {k.lower(): v for k, v in options.items()}
 
     def _process_default_options(self):

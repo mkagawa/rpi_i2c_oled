@@ -13,9 +13,9 @@ class Display:
     DEFAULT_BUSNUM = 1
     SCREENSHOT_PATH = "./img/examples/"
 
-    def __init__(self, busnum = None, screenshot = False, rotate = False, show_icons = True, compact = False, show_hint = False):
+    def __init__(self, busnum = None, screenshot = False, rotate = False, show_icons = True,
+                 compact = False, show_hint = False):
         self.logger = logging.getLogger('Display')
-        self.logger.info(f"self={self}, show_icons={show_icons}/rotate={rotate}/show_hint={show_hint}/busnum={busnum}")
 
         if not isinstance(busnum, int):
             busnum = Display.DEFAULT_BUSNUM
@@ -81,8 +81,7 @@ class BaseScreen:
         self.font_size = 8
         self.logger = logging.getLogger('Screen')
         self.logger.info("'" + self.__class__.__name__ + "' created")
-        self.logger.info(f"BaseScreen: display={display}->{self.display},{self.display.show_icons}")
-        self.datetime_format = config.get_option_value('datetime_format') #if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+        self.datetime_format = config.get_option_value('datetime_format') if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
 
     @property
     def name(self):
@@ -97,7 +96,6 @@ class BaseScreen:
            # invert black icon to white (255) for OLED display
            #self.icon = ImageOps.invert( self.icon )
            self.icon = img.resize([30, 30])
-           self.logger.info(f"image = {Utils.current_dir + self.icon_path}, img={img}, {self.icon}")
 
 
     @property
@@ -212,7 +210,6 @@ class BaseScreen:
         self.display_hint()
 
         # add icon to canvas (if enabled)
-        self.logger.info(f"show_icons = {self.display.show_icons}, {self.icon}, {self.text_indent}")
         if self.display.show_icons and self.icon:
            self.display.image.paste(self.icon, (-3, 3))
 
@@ -254,7 +251,6 @@ class StaticScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
-            self.logger.warn(f"Datetime = {self.datetime_format}")
             self._text = self.utils.compile_text(self._text, self.datetime_format)
             self.logger.info(f"Static screen text compiled: '{self._text}'")
 
