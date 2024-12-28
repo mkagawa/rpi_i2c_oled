@@ -48,7 +48,7 @@ class Utils:
     def get_hostname() -> str:
         try:
             ret = Utils.hassos_get_info("/host/info")
-            Utils.logger.info(f"Hostname: {ret['hostname']}")
+            Utils.logger.info(f"Hostname: {ret['data']['hostname']}")
             return ret['data']['hostname']
         except Exception as e:
             Utils.logger.info(f"Error getting hostname: {e}")
@@ -58,6 +58,7 @@ class Utils:
     def get_ip() -> str:
         try:
             ret = Utils.hassos_get_info("/network/info")
+            Utils.logger.info(f"Hostname: {ret['data']['interfaces']}")
             addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
             ip_addr = addr.split('/')[0]
             Utils.logger.info(f"address: {ip_addr}")
