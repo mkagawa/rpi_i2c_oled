@@ -212,6 +212,7 @@ class BaseScreen:
         self.display_hint()
 
         # add icon to canvas (if enabled)
+        self.logger.info(f"show_icon = {self.show_icon}, {self.icon}, {self.text_indent}")
         if self.display.show_icons and self.icon:
            self.display.image.paste(self.icon, (-3, 3))
 
