@@ -57,12 +57,11 @@ class Utils:
         format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
         return datetime.now().strftime(format)
 
-    @staticmethod
-    def compile_text(text, additional_replacements = {}):
+    def compile_text(self, text, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: Utils.get_hostname(),
             "{ip}": lambda prop: Utils.get_ip(),
-            "{datetime}": lambda prop: Utils.get_datetime()
+            "{datetime}": lambda prop: self.get_datetime()
         }
         replacements = {**replacements, **additional_replacements}
         regex = re.compile("(%s)" % "|".join(map(re.escape, replacements.keys())))
@@ -103,13 +102,12 @@ class HassioUtils(Utils):
         else:
             return "0.0.0.0"
 
-    @staticmethod
-    def compile_text(text, additional_replacements = {}):
+    def compile_text(self, text, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: HassioUtils.get_hostname(),
             "{ip}": lambda prop: HassioUtils.get_ip()
         }
-        text = Utils.compile_text(text, {**replacements, **additional_replacements})
+        text = self.compile_text(text, {**replacements, **additional_replacements})
         regex = re.compile(r"\{hassio\.[a-z]+\.[a-z\.]+\}")
         return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
             match.string[match.start():match.end()][len("{hassio."):-1]), text)
