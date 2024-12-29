@@ -67,13 +67,12 @@ class Utils:
             Utils.logger.info(f"Error getting network info: {e}")
             return ""
 
-    def hassos_get_info(type) -> dict:
-        url = 'http://supervisor/{}'.format(type)
+    def hassos_get_info(type):
+        url = f'http://supervisor/{type}'
         Utils.logger.info("Requesting data from '" + url + "'")
         ret = Utils.curl(url)
         if ret is None or ret['result'] != 'ok':
             return None
-        Utils.logger.info(f"got data = {ret}")
         return ret
 
     def get_datetime(format = None):
