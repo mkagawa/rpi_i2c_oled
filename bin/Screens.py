@@ -236,10 +236,10 @@ class BaseScreen:
                 break
 
     def run(self):
-        self.logger.info("'" + self.__class__.__name__ + "' rendering")
+        self.logger.info(f"'{self.__class__.__name__}' rendering")
         self.display.prepare()
         self.render()
-        self.logger.info("'" + self.__class__.__name__ + "' completed")
+        self.logger.info(f"'{self.__class__.__name__}' completed")
 
 class StaticScreen(BaseScreen):
     @property
@@ -250,6 +250,7 @@ class StaticScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
+            self.logger.info(f"utils = {self.utils}")
             self._text = self.utils.compile_text(self._text)
             self.logger.info(f"Static screen text compiled: '{self._text}'")
 
@@ -334,7 +335,7 @@ class WelcomeScreen(BaseScreen):
         if not self._text_compiled:
             self._text_compiled = True
             self._text = self.utils.compile_text(self._text)
-            self.logger.info("Welcome screen text compiled: '" + self._text + "'")
+            self.logger.info(f"Welcome screen text compiled: '{self._text}'")
 
         return self._text
 
