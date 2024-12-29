@@ -92,6 +92,7 @@ class Config:
 
         try:
             info = HassioUtils.hassos_get_info('host/info')
+            Config.logger.info(f'host-info = {info}')
             if info:
                 Config.hassio_supported = True
                 Config.logger.info('Home Assistant instance found')
