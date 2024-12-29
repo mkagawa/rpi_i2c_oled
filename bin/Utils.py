@@ -45,47 +45,25 @@ class Utils:
         return display.width < w
 
     @staticmethod
-    def get_hostname() -> str:
-        try:
-            ret = Utils.hassos_get_info("host/info")
-            Utils.logger.info(f"Hostname: {ret['data']['hostname']}")
-            return ret['data']['hostname']
-        except Exception as e:
-            Utils.logger.info(f"Error getting hostname: {e}")
-            return ""
+    def get_hostname(opt = ""):
+        return str(Utils.shell_cmd("hostname " + opt + "| cut -d\' \' -f1")).strip()
 
     @staticmethod
-    def get_ip() -> str:
-        try:
-            ret = Utils.hassos_get_info("network/info")
-            Utils.logger.info(f"Network: {ret['data']['interfaces']}")
-            addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
-            ip_addr = addr.split('/')[0]
-            Utils.logger.info(f"IP address: {ip_addr}")
-            return ip_addr
-        except Exception as e:
-            Utils.logger.info(f"Error getting network info: {e}")
-            return ""
-
-    def hassos_get_info(type):
-        url = f'http://supervisor/{type}'
-        Utils.logger.info(f"Requesting data from '{url}'")
-        ret = Utils.curl(url)
-        if ret is None or ret['result'] != 'ok':
-            return None
-        return ret
+    def get_ip():
+        return Utils.get_hostname('-I')
 
     def get_datetime(format = None):
-        if not format:
-            format = Utils.datetime_format if hasattr(Utils, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+        Utils.logger.info(f"get_datetime:datetime_format={format},{Config.datetime_format}")
+        # if not format:
+        #     format = Config.datetime_format if hasattr(Config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
         return datetime.now().strftime(format)
 
     @staticmethod
-    def compile_text(text, datetime_format = None, additional_replacements = {}):
+    def compile_text(text, config, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: Utils.get_hostname(),
             "{ip}": lambda prop: Utils.get_ip(),
-            "{datetime}": lambda prop: Utils.get_datetime(datetime_format)
+            "{datetime}": lambda prop: Utils.get_datetime(config.datetime_format)
         }
         replacements = {**replacements, **additional_replacements}
         regex = re.compile("(%s)" % "|".join(map(re.escape, replacements.keys())))
@@ -105,7 +83,12 @@ class Utils:
 class HassioUtils(Utils):
     @staticmethod
     def hassos_get_info(type):
-        return Utils.hassos_get_info(type)
+        url = f'http://supervisor/{type}'
+        Utils.logger.info(f"Requesting data from '{url}'")
+        ret = Utils.curl(url)
+        if ret is None or ret['result'] != 'ok':
+            return None
+        return ret
 
     @staticmethod
     def get_hostname(opt = ""):
@@ -122,13 +105,12 @@ class HassioUtils(Utils):
             return "0.0.0.0"
 
     @staticmethod
-    def compile_text(text, datetime_format = None, additional_replacements = {}):
+    def compile_text(text, config, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: HassioUtils.get_hostname(),
-            "{ip}": lambda prop: HassioUtils.get_ip(),
-            "{datetime}": lambda prop: Utils.get_datetime(datetime_format)
+            "{ip}": lambda prop: HassioUtils.get_ip()
         }
-        text = Utils.compile_text(text, datetime_format, {**replacements, **additional_replacements})
+        text = Utils.compile_text(text, config, {**replacements, **additional_replacements})
         regex = re.compile(r"\{hassio\.[a-z]+\.[a-z\.]+\}")
         return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
             match.string[match.start():match.end()][len("{hassio."):-1]), text)

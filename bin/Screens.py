@@ -251,7 +251,7 @@ class StaticScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
-            self._text = self.utils.compile_text(self._text)
+            self._text = self.utils.compile_text(self._text, self.config)
             self.logger.info(f"Static screen text compiled: '{self._text}'")
 
         return self._text
@@ -334,7 +334,7 @@ class WelcomeScreen(BaseScreen):
 
         if not self._text_compiled:
             self._text_compiled = True
-            self._text = self.utils.compile_text(self._text)
+            self._text = self.utils.compile_text(self._text, self.config)
             self.logger.info("Welcome screen text compiled: '" + self._text + "'")
 
         return self._text
