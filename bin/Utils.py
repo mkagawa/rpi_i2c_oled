@@ -128,7 +128,7 @@ class HassioUtils(Utils):
             "{ip}": lambda prop: HassioUtils.get_ip()
         }
         text = Utils.compile_text(text, datetime_format, {**replacements, **additional_replacements})
-        regex = re.compile(r"{hassio\.[a-z]+\.[a-z\.]+}")
+        regex = re.compile(r"\{hassio\.[a-z]+\.[a-z\.]+\}")
         return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
             match.string[match.start():match.end()][len("{hassio."):-1]), text)
 
@@ -138,6 +138,7 @@ class HassioUtils(Utils):
             properties_string = namespace.rootproperty.leaf
             e.g. properties_string as 'os.version.latest' will find {'latest':'version'} in os/info
         """
+        Utils.logger.info(f"get_hassio_info_property = {properties_string}")
         properties = properties_string.split('.')
         namespace = properties[0]
         properties.pop(0)
