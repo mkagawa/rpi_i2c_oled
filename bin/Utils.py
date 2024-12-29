@@ -10,6 +10,7 @@ from datetime import datetime
 class Utils:
     logger = logging.getLogger('Utils')
     current_dir = str(pathlib.Path(__file__).parent.parent.resolve())
+    datetime_format = None
 
     @staticmethod
     def shell_cmd(cmd):
@@ -18,7 +19,7 @@ class Utils:
     @staticmethod
     def curl(url, headers=None) -> dict:
         token = os.getenv("SUPERVISOR_TOKEN")
-        headers = headers={"Authorization": f"Bearer {token}", "content-type": "application/json"}
+        headers = {"Authorization": f"Bearer {token}", "content-type": "application/json"}
         response = requests.get(url, headers=headers)
         if response.status_code != 200:
             Utils.logger.warning(f"Error in calling {url}, status={response.status_code}")
@@ -55,7 +56,7 @@ class Utils:
     def get_datetime(format = None):
         Utils.logger.info(f"get_datetime:datetime_format={format},{Utils.datetime_format}")
         # if not format:
-        #     format = Config.datetime_format if hasattr(Config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+        format = Config.datetime_format if hasattr(Config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
         return datetime.now().strftime(format)
 
     @staticmethod
@@ -81,6 +82,7 @@ class Utils:
         return slug
         
 class HassioUtils(Utils):
+    datetime_format = None
     @staticmethod
     def hassos_get_info(type):
         url = f'http://supervisor/{type}'
