@@ -128,9 +128,9 @@ class Config:
 
     def _init_utils(self):
         if self.is_hassio_supported:
-            self.utils = HassioUtils
+            self.utils = HassioUtils()
         else:
-            self.utils = Utils
+            self.utils = Utils()
 
         datetime_format = self.get_option_value('datetime_format')
         Config.logger.info(f"got datetime_format={datetime_format}")
