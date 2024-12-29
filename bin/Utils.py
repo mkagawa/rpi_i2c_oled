@@ -71,10 +71,10 @@ class Utils:
         url = 'http://supervisor/{}'.format(type)
         Utils.logger.info("Requesting data from '" + url + "'")
         ret = Utils.curl(url)
+        if ret is None or ret['result'] != 'ok':
+            return None
         Utils.logger.info(f"got data = {ret}")
-        if ret is not None and ret['result'] == 'ok':
-            return ret
-        return None
+        return ret
 
     def get_datetime(format = None):
         if not format:
