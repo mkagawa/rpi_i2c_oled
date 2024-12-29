@@ -133,6 +133,7 @@ class Config:
             self.utils = Utils
 
         datetime_format = self.get_option_value('datetime_format')
+        Config.logger.info(f"got datetime_format={datetime_format}")
         if datetime_format:
             self.utils.datetime_format = datetime_format
 
