@@ -61,7 +61,7 @@ class Utils:
             Utils.logger.info(f"Network: {ret['data']['interfaces']}")
             addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
             ip_addr = addr.split('/')[0]
-            Utils.logger.info(f"address: {ip_addr}")
+            Utils.logger.info(f"IP address: {ip_addr}")
             return ip_addr
         except Exception as e:
             Utils.logger.info(f"Error getting network info: {e}")
@@ -130,7 +130,7 @@ class HassioUtils(Utils):
         text = Utils.compile_text(text, datetime_format, {**replacements, **additional_replacements})
         regex = re.compile(r"{hassio\.[a-z]+\.[a-z\.]+}")
         return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
-            match.string[match.start():match.end()][len("hassio."):-1]), text)
+            match.string[match.start():match.end()][len("{hassio."):-1]), text)
 
     @staticmethod
     def get_hassio_info_property(properties_string):
