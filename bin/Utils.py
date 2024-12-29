@@ -47,7 +47,7 @@ class Utils:
     @staticmethod
     def get_hostname() -> str:
         try:
-            ret = Utils.hassos_get_info("/host/info")
+            ret = Utils.hassos_get_info("host/info")
             Utils.logger.info(f"Hostname: {ret['data']['hostname']}")
             return ret['data']['hostname']
         except Exception as e:
@@ -57,7 +57,7 @@ class Utils:
     @staticmethod
     def get_ip() -> str:
         try:
-            ret = Utils.hassos_get_info("/network/info")
+            ret = Utils.hassos_get_info("network/info")
             Utils.logger.info(f"Network: {ret['data']['interfaces']}")
             addr = ret['data']['interfaces'][0]['ipv4']['address'][0]
             ip_addr = addr.split('/')[0]
@@ -129,20 +129,21 @@ class HassioUtils(Utils):
         }
         text = Utils.compile_text(text, datetime_format, {**replacements, **additional_replacements})
         regex = re.compile(r"{hassio\.[a-z]+\.[a-z\.]+}")
-        return regex.sub(lambda match: HassioUtils.get_hassio_info_property(match.string[match.start():match.end()][len(r"hassio\."):-1]), text)
+        return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
+            match.string[match.start():match.end()][len("hassio."):-1]), text)
 
     @staticmethod
     def get_hassio_info_property(properties_string):
-        '''
+        """
             properties_string = namespace.rootproperty.leaf
             e.g. properties_string as 'os.version.latest' will find {'latest':'version'} in os/info
-        '''
+        """
         properties = properties_string.split('.')
         namespace = properties[0]
         properties.pop(0)
         url = str(namespace) + "/info"
-        Utils.logger.info("Searching '"+ namespace +" for': " + '.'.join(properties))
-        try :
+        Utils.logger.info(f"Searching {namespace} for': {'.'.join(properties)} / url: {url}")
+        try:
             info = HassioUtils.hassos_get_info(url)
             if info and 'data' in info:
                 value = info['data']
@@ -152,10 +153,10 @@ class HassioUtils(Utils):
                         value = value[prop]
                         data_key = '.'.join([data_key, prop])
                     else:
-                        raise Exception("Could not find '" + value + "' in '" + data_key + "'")
+                        raise Exception(f"Could not find '{value}' in '{data_key}'")
 
                 if isinstance(value, dict):
-                    raise Exception("'" + property + "' is not a leaf")
+                    raise Exception(f"'{property}' is not a leaf")
 
                 return value
             else:
