@@ -53,10 +53,8 @@ class Utils:
     def get_ip():
         return Utils.get_hostname('-I')
 
-    def get_datetime(format = None):
-        Utils.logger.info(f"get_datetime:datetime_format={format},{Utils.datetime_format}")
-        # if not format:
-        format = Config.datetime_format if hasattr(Config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+    def get_datetime(self):
+        format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
         return datetime.now().strftime(format)
 
     @staticmethod
@@ -82,7 +80,6 @@ class Utils:
         return slug
         
 class HassioUtils(Utils):
-    datetime_format = None
     @staticmethod
     def hassos_get_info(type):
         url = f'http://supervisor/{type}'
