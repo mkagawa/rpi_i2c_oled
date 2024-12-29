@@ -69,7 +69,7 @@ class Utils:
 
     def hassos_get_info(type):
         url = f'http://supervisor/{type}'
-        Utils.logger.info("Requesting data from '" + url + "'")
+        Utils.logger.info(f"Requesting data from '{url}'")
         ret = Utils.curl(url)
         if ret is None or ret['result'] != 'ok':
             return None
@@ -105,7 +105,7 @@ class Utils:
 class HassioUtils(Utils):
     @staticmethod
     def hassos_get_info(type):
-        Utils.hassos_get_info(type)
+        return Utils.hassos_get_info(type)
 
     @staticmethod
     def get_hostname(opt = ""):
