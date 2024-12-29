@@ -107,7 +107,7 @@ class HassioUtils(Utils):
             "{hostname}": lambda prop: HassioUtils.get_hostname(),
             "{ip}": lambda prop: HassioUtils.get_ip()
         }
-        text = self.compile_text(text, {**replacements, **additional_replacements})
+        text = super().compile_text(text, {**replacements, **additional_replacements})
         regex = re.compile(r"\{hassio\.[a-z]+\.[a-z\.]+\}")
         return regex.sub(lambda match: HassioUtils.get_hassio_info_property(
             match.string[match.start():match.end()][len("{hassio."):-1]), text)
