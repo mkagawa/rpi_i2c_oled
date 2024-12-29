@@ -81,7 +81,7 @@ class BaseScreen:
         self.font_size = 8
         self.logger = logging.getLogger('Screen')
         self.logger.info("'" + self.__class__.__name__ + "' created")
-        self.datetime_format = config.get_option_value('datetime_format') if hasattr(config, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+        self.datetime_format = config.get_option_value('datetime_format', screen=self, default='%d/%m/%Y %H:%M:%S')
 
     @property
     def name(self):
