@@ -54,8 +54,8 @@ class Utils:
         return Utils.get_hostname('-I')
 
     def get_datetime(self):
-        format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
-        return datetime.now().strftime(format)
+        datetime_format = self.datetime_format if hasattr(self, 'datetime_format') else "%d/%m/%Y %H:%M:%S"
+        return datetime.now().strftime(datetime_format)
 
     def compile_text(self, text, additional_replacements = {}):
         replacements = {
