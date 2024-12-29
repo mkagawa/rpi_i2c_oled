@@ -125,7 +125,8 @@ class HassioUtils(Utils):
     def compile_text(text, datetime_format = None, additional_replacements = {}):
         replacements = {
             "{hostname}": lambda prop: HassioUtils.get_hostname(),
-            "{ip}": lambda prop: HassioUtils.get_ip()
+            "{ip}": lambda prop: HassioUtils.get_ip(),
+            "{datetime}": lambda prop: Utils.get_datetime(datetime_format)
         }
         text = Utils.compile_text(text, datetime_format, {**replacements, **additional_replacements})
         regex = re.compile(r"\{hassio\.[a-z]+\.[a-z\.]+\}")

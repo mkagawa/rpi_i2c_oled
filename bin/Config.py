@@ -92,7 +92,6 @@ class Config:
 
         try:
             info = HassioUtils.hassos_get_info('host/info')
-            Config.logger.info(f'host-info = {info}')
             if info:
                 Config.hassio_supported = True
                 Config.logger.info('Home Assistant instance found')
@@ -245,10 +244,8 @@ class Config:
 
     def enable_graceful_exit(self):
         screen = self.screen_factory('static')
-        text = self.get_option_value('graceful_exit_text')
-        if not text:
-            text = 'Goodbye'
-        
+        text = self.get_option_value('graceful_exit_text', default='Goodbye')
+
         screen.text = text
         screen.duration = 0
         screen.noscroll = True
