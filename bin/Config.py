@@ -98,9 +98,9 @@ class Config:
             else:
                 Config.hassio_supported = False
                 Config.logger.info('Home Assistant is not supported on this instance')
-        except:
+        except Exception as e:
             Config.hassio_supported = False
-            Config.logger.info('Home Assistant is not supported on this instance')
+            Config.logger.info(f'Home Assistant is not supported on this instance, {e}')
 
         return Config.hassio_supported
 
